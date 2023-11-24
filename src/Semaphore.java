@@ -1,11 +1,14 @@
+import java.util.*;
+
 public class Semaphore {
     public final int maxConnection;
 
     private int value;
-
+    private Queue<Device> deviceQueue;
     protected Semaphore(int maxConnection) {
         this.value = maxConnection;
         this.maxConnection = maxConnection;
+        this.deviceQueue = new ArrayDeque<>();
     }
 
     public synchronized void acquire(Device device) {
@@ -21,7 +24,7 @@ public class Semaphore {
         else {
             System.out.println("- (" + device.getDeviceName() + ") (" + device.getType() + ") arrived.");
         }
-        device.setConnectionNumber(maxConnection - getValue());
+        device.setConnectionNumber(device.getConnectedRouter().getEmptyConnection());
         System.out.println("Connection " + device.getConnectionNumber() + ": (" + device.getDeviceName() + ") Occupied.");
     }
 
